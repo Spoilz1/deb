@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+# refresh completions
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+fi

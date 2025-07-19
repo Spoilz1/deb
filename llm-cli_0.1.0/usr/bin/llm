@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""
+llm-cli — tiny wrapper around the Agent class you already have.
+Put your original sources in a package directory and import them.
+"""
+import argparse, sys, os
+sys.path.insert(0, "/usr/share/llm-cli")   # where we’ll drop agent.py etc.
+from agent import Agent
+from api_handler import APIHandler
+from configurations import Configurations
+from functions_handler import Functions
+
+cfg = Configurations()
+api = APIHandler(cfg.endpoints["chat"], cfg.headers["chat"])
+functions = Functions()
+agent = Agent(api, functions, system_message="You are a helpful CLI assistant.")
+
+def one_shot(question: str):
+    print(agent.chat([{"type":"text","text":question}]))
+
+def repl():
+    print("Interactive LLM chat (Ctrl-D to quit).\n")
+    try:
+        while True:
+            line = input("> ")
+            if not line.strip():
+                continue
+            print(agent.chat([{"type":"text","text":line}]))
+    except (EOFError, KeyboardInterrupt):
+        print("\nbye")
+
+def main():
+    parser = argparse.ArgumentParser(prog="llm", description="CLI LLM assistant")
+    parser.add_argument("question", nargs="?", help="single-shot question")
+    parser.add_argument("--chat", action="store_true", help="start interactive chat")
+    args = parser.parse_args()
+
+    if args.chat:
+        repl()
+    elif args.question:
+        one_shot(args.question)
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main()

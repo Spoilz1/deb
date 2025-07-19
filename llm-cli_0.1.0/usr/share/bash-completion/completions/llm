@@ -1,0 +1,20 @@
+_llm_complete()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="--chat --help"
+
+    case "${prev}" in
+        llm)
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+        *)
+            COMPREPLY=( $(compgen -f -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+complete -F _llm_complete llm

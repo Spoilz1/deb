@@ -1,0 +1,10 @@
+Package: llm-cli
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: all
+Depends: python3, python3-pip, bash-completion
+Maintainer: Your Name <you@example.com>
+Description: Command-line wrapper for the LLM backend
+ Installs /usr/bin/llm with bash completion and a systemd-free
+ python3 agent that talks to OpenAI / Azure / any HTTP backend.
